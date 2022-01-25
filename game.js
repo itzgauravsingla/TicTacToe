@@ -8,12 +8,7 @@ document.querySelectorAll("td")[0].innerHTML = scoreX;
 document.querySelectorAll("td")[1].innerHTML = scoreO;
 
 // initiating box values
-var val = [];
-for(var i=0; i<9; i++)
-{
-    if(img[i].getAttribute("src") === "images/empty.png")
-        val[i] = -1;
-}
+var val = Array(9).fill(-1);
 
 // Changing the image and value
 function setX(box, index){
@@ -35,11 +30,13 @@ function valueOf(box)
     else if(box.getAttribute("src") === "images/X.png")
         return 1;
 }
-var player1 = prompt("What do u want to be?");
-if(!["x", "X", "o", "O"].includes(player1))
+
+// Starting the game
+var player1 = prompt("What do u want to be?").toUpperCase();
+if(!["X", "O"].includes(player1))
 {
     alert("Haha! Have you never played TicTacToe?");
-    alert("Refresh the page and try x, X o, or O.");
+    alert("Refresh the page and try x, or o.");
 }
 var curplayer = player1;
 
@@ -58,14 +55,14 @@ for(i=0; i<9; i++)
 // Updating the scr and values
 function update(index)
 {
-    if(curplayer === "X" || curplayer === "x")
+    if(curplayer === "X")
     {
         setX(img[index], index);
         check();
         curplayer = "O";
         
     } 
-    else if(curplayer === "O" || curplayer === "o")
+    else if(curplayer === "O")
     {
         setO(img[index], index);
         check();
@@ -78,8 +75,13 @@ var row = [[0,1,2],[3,4,5],[6,7,8]];
 var col = [[0,3,6], [1,4,7],[2,5,8]];
 var dia = [[0,4,8],[2,4,6]];
 
-
 function check(){
+    if(!val.includes(-1)) 
+    {
+        alert("It's a tie! Reset the board using Reset button");
+        document.querySelectorAll("h1")[0].innerHTML = "It was a TIE";
+    }  
+
     for(var i = 0; i < 3; i++)
     {
         // Check for rows
@@ -94,7 +96,7 @@ function check(){
             document.querySelectorAll("td")[0].innerHTML = scoreX;
             document.querySelectorAll("td")[1].innerHTML = scoreO;
             document.querySelectorAll("h1")[0].innerHTML = curplayer + " Wins horizontally";
-            clean();
+            val = Array(9).fill(-1);
         }
         
         // Check for column
@@ -109,7 +111,7 @@ function check(){
             document.querySelectorAll("td")[0].innerHTML = scoreX;
             document.querySelectorAll("td")[1].innerHTML = scoreO;
             document.querySelectorAll("h1")[0].innerHTML = curplayer + " Wins vertically";
-            clean();
+            val = Array(9).fill(-1);
         }
 
         // Check for diameter
@@ -126,13 +128,11 @@ function check(){
                 document.querySelectorAll("td")[0].innerHTML = scoreX;
                 document.querySelectorAll("td")[1].innerHTML = scoreO;
                 document.querySelectorAll("h1")[0].innerHTML = curplayer + " Wins diagonally";
-                clean();
+                val = Array(9).fill(-1);
             }
         }
     }
 }
-
-
 
 // // Calculating values of the boxes
 // for(var i=0; i<9; i++)
@@ -150,5 +150,5 @@ function clean() {
     }
 
 }
-
+        
 document.querySelector("input").addEventListener("click", clean);
